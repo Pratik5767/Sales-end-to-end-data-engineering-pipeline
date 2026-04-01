@@ -10,7 +10,7 @@ This project implements a production-grade **end-to-end data engineering pipelin
 
 ---
 
-## 🗂️ Repository Structure
+## 🗂️ Folder Structure
 
 ```
 📦 END-TO-END SALES DE PIPELINE
@@ -36,9 +36,6 @@ This project implements a production-grade **end-to-end data engineering pipelin
 │   ├── project flow.txt
 │   └── Sales_Report.pbix                 # Power BI report file
 │
-├── fabric_view.png
-├── project_architecture.png
-├── workflow_automation.png
 ├── .env
 └── .gitignore
 ```
@@ -70,6 +67,8 @@ Triggered when new files arrive in the **Raw** folder:
 2. **ForEach Activity** — Iterates over each new file
 3. **Notebook Activity** — Runs `Raw_to_Landing.ipynb` for each file using incremental loading logic
 
+![Workflow Automation](pipeline1.png)
+
 ### Master Pipeline — `PL_Master_Sales`
 Orchestrates the full data flow end-to-end:
 ```
@@ -77,7 +76,7 @@ Invoke PL_Raw_To_Landing → Landing_To_Bronze → Bronze_To_Silver → Silver_T
 ```
 All four stages run sequentially and were validated with ✅ **Succeeded** status.
 
-![Workflow Automation](workflow_automation.png)
+![Workflow Automation](pipeline2.png)
 
 ---
 
@@ -98,6 +97,8 @@ All four stages run sequentially and were validated with ✅ **Succeeded** statu
 - Relationships were defined and validated within the model
 - A **Sales Report** (`Sales_Report.pbix`) was built on top of the semantic model
 - The report was **published back to Power BI Service**
+
+![Sales](sales_report.png)
 
 ---
 
@@ -141,16 +142,7 @@ All notebooks implement **incremental loading** using a `processed_date` waterma
 
 ## 📸 Screenshots
 
-<table>
-  <tr>
-    <td align="center"><b>Master Pipeline Run</b></td>
-    <td align="center"><b>Fabric Workspace View</b></td>
-  </tr>
-  <tr>
-    <td><img src="workflow_automation.png" width="400"/></td>
-    <td><img src="fabric_view.png" width="400"/></td>
-  </tr>
-</table>
+![Fabric](fabric.png)
 
 ---
 
