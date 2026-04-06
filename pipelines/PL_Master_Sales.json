@@ -1,0 +1,127 @@
+{
+    "name": "PL_Master_Sales",
+    "objectId": "f95ae615-3419-4b0d-ab12-e498f5ce09b7",
+    "properties": {
+        "activities": [
+            {
+                "name": "Invoke pipeline raw_to_landing",
+                "type": "InvokePipeline",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "waitOnCompletion": true,
+                    "operationType": "InvokeFabricPipeline",
+                    "pipelineId": "c6406fe0-61ed-4ff4-87f1-d910500eed0a",
+                    "workspaceId": "5523ca1d-23b4-4a5f-be21-01322d51f258"
+                },
+                "externalReferences": {
+                    "connection": "3c9f4e71-4d23-4b32-812b-adc921729fb9"
+                }
+            },
+            {
+                "name": "Landing_to_Bronze",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Invoke pipeline raw_to_landing",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "2419c28b-1ffb-4034-82c5-06b589a73a80",
+                    "workspaceId": "5523ca1d-23b4-4a5f-be21-01322d51f258",
+                    "parameters": {
+                        "today_date": {
+                            "value": {
+                                "value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "Bronze_to_silver",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Landing_to_Bronze",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "ee093727-f871-4153-9e5b-7a6140742367",
+                    "workspaceId": "5523ca1d-23b4-4a5f-be21-01322d51f258",
+                    "parameters": {
+                        "today_date": {
+                            "value": {
+                                "value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "Silver_to_gold",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "Bronze_to_silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "a86f09d0-8481-4310-be8f-b267685213bb",
+                    "workspaceId": "5523ca1d-23b4-4a5f-be21-01322d51f258",
+                    "parameters": {
+                        "today_date": {
+                            "value": {
+                                "value": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        ],
+        "lastModifiedByObjectId": "5c8b9eac-bf51-49cc-b47c-a59ec8373d01",
+        "lastPublishTime": "2026-03-30T18:29:59Z"
+    }
+}
